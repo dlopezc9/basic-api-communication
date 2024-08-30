@@ -8,18 +8,25 @@ namespace APIConnection.Controllers
     [Route("[controller]")]
     public class PhoneController : ControllerBase
     {
-        private readonly IPhoneService phoneService;
+        private readonly IPhoneService _phoneService;
 
         public PhoneController(IPhoneService phoneService)
         {
-            this.phoneService = phoneService;
+            _phoneService = phoneService;
         }
 
         [HttpGet(Name = "Phone")]
-        public IEnumerable<Phone> Get()
+        public async Task<IActionResult> Get()
         {
-            var result = this.phoneService.GetPhones();
-            return result.Result;
+            try
+            {
+                var phones = await _phoneService.GetPhones();
+                return Ok(phones);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500 , new { message = ex.Message, innerException = ex.InnerException.Message });
+            }
         }
     }
 }

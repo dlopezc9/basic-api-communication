@@ -4,6 +4,6 @@ namespace APIConnection.Interfaces
 {
     public interface IPhoneService
     {
-        Task<IEnumerable<Phone>> GetPhones();
+        Task<IEnumerable<Phone>?> GetPhones();
     }
 }
