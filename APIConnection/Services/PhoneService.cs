@@ -6,10 +6,18 @@ namespace APIConnection.Services
 {
     public class PhoneService : IPhoneService
     {
+
+        private readonly IHttpClientFactory _httpClientFactory;
+
+        public PhoneService(IHttpClientFactory httpClientFactory)
+        {
+            _httpClientFactory = httpClientFactory;
+        }
+
         public async Task<IEnumerable<Phone>?> GetPhones()
         {
             //Api Client SetUp.
-            var client = new HttpClient();
+            var client = _httpClientFactory.CreateClient("PhoneApi");
             client.BaseAddress = new Uri("https://api.restful-api.dev/");
             string endpoint = $"{client.BaseAddress.AbsoluteUri}objects";
             var endPointAddress = new Uri(endpoint);
@@ -32,7 +40,7 @@ namespace APIConnection.Services
             }
             catch (HttpRequestException ex)
             {
-                throw new Exception("The reached endpoint is not avaible at the moment, please try again later.", ex);
+                throw new Exception("The reached endpoint is not available at the moment, please try again later.", ex);
             }
         }
     }
